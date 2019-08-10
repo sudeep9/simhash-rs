@@ -83,10 +83,24 @@ ask: perhaps I shall see it written up somewhere.'
 fn bench_simhash(b: &mut Bencher) {
     b.iter(|| {
         for paragraph in ALICE.split("\n").cycle().take(1000) {
-            black_box(simhash(paragraph));
+            black_box(simhash(paragraph, ' '));
         }
     });
 }
 
-benchmark_group!(benches, bench_simhash);
+fn bench_simhash_long_path(b: &mut Bencher) {
+    let path = "An/iterator/over/substrings/of/this/string/slice/separated/by/characters/matched/by/a/pattern";
+    b.iter(|| {
+        black_box(simhash(path, '/'));
+    });
+}
+
+fn bench_simhash_avg_path(b: &mut Bencher) {
+    let path = "An/iterator/over/substrings/of/this/string/slice";
+    b.iter(|| {
+        black_box(simhash(path, '/'));
+    });
+}
+
+benchmark_group!(benches, bench_simhash, bench_simhash_long_path, bench_simhash_avg_path);
 benchmark_main!(benches);

@@ -56,8 +56,8 @@ pub fn simhash_stream<'w, W>(words: W) -> u64
 }
 
 /// Calculate `u64` simhash from `&str` split by whitespace
-pub fn simhash(text: &str) -> u64 {
-    simhash_stream(text.split_whitespace())
+pub fn simhash(text: &str, c: char) -> u64 {
+    simhash_stream(text.split(c))
 }
 
 /// Calculate `u64` simhash from `&str` split by whitespace
@@ -94,9 +94,9 @@ pub fn similarity(text1: &str, text2: &str) -> f64 {
 #[test]
 #[cfg(all(feature = "hasher-sip", not(feature = "hasher-fnv")))]
 fn simhash_test() {
-    assert_eq!(simhash("The cat sat on the mat"), 2595200813813010837);
-    assert_eq!(simhash("The cat sat under the mat"), 2595269945604666783);
-    assert_eq!(simhash("Why the lucky stiff"), 1155526875459215761);
+    assert_eq!(simhash("The cat sat on the mat", ' '), 2595200813813010837);
+    assert_eq!(simhash("The cat sat under the mat", ' '), 2595269945604666783);
+    assert_eq!(simhash("Why the lucky stiff", ' '), 1155526875459215761);
 }
 
 #[test]
